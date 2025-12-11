@@ -1,39 +1,59 @@
-      // Sticky header
-      window.addEventListener("scroll", () => {
-        const header = document.getElementById("header");
-        header.classList.toggle("scrolled", window.scrollY > 50);
-      });
+document.addEventListener('DOMContentLoaded', () => {
+            // Mobile Menu Toggle
+            const menuToggle = document.querySelector('.menu-toggle');
+            const navLinks = document.querySelector('.nav-links');
 
-      // Smooth scroll
-      document.getElementById("order-btn").addEventListener("click", () => {
-        document.getElementById("menu").scrollIntoView({ behavior: "smooth" });
-      });
+            menuToggle.addEventListener('click', () => {
+                navLinks.classList.toggle('active');
+            });
 
-      // Validación formulario
-      document
-        .getElementById("contact-form")
-        .addEventListener("submit", (e) => {
-          const name = document.getElementById("name").value.trim();
-          const email = document.getElementById("email").value.trim();
-          const message = document.getElementById("message").value.trim();
-          if (!name || !email || !message) {
-            e.preventDefault();
-            alert("Por favor, completa todos los campos.");
-          }
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.addEventListener('click', () => {
+                    navLinks.classList.remove('active');
+                });
+            });
+
+            // Smooth Scrolling
+            document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const targetId = this.getAttribute('href');
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        const headerHeight = document.querySelector('.main-header').offsetHeight;
+                        const targetPosition = targetElement.offsetTop - headerHeight;
+                        window.scrollTo({
+                            top: targetPosition,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+
+            // Menu Detail Pop-up (mejorado con span en lugar de alert)
+            document.querySelectorAll('.view-details-btn').forEach(button => {
+                button.addEventListener('click', (e) => {
+                    const flavor = e.target.dataset.flavor;
+                    const itemTitle = e.target.closest('.menu-item').querySelector('.item-title').textContent;
+                    
+                    let message = '';
+                    switch(flavor) {
+                        case 'beef':
+                            message = `¡Excelente elección! Nuestra ${itemTitle} lleva carne de res lenta, papa y especias tradicionales. Acompáñala con nuestro ají casero.`;
+                            break;
+                        case 'chicken':
+                            message = `El ${itemTitle} se prepara con pechuga desmenuzada, arroz y achiote natural para un sabor profundo y cálido.`;
+                            break;
+                        case 'cheese':
+                            message = `Nuestra ${itemTitle} combina quesos mozzarella, costeño, doble crema y queso fresco. ¡Fundido perfecto en cada bocado!`;
+                            break;
+                        case 'specialty':
+                            message = `La ${itemTitle} es un postre tradicional: plátano maduro y dulce de guayaba artesanal. Ideal con café de olla.`;
+                            break;
+                        default:
+                            message = `Pronto tendremos más detalles de ${itemTitle} — ¡pregúntanos en tienda!`;
+                    }
+                    alert(message);
+                });
+            });
         });
-
-      // Menú hamburguesa
-      const menuToggle = document.getElementById("menuToggle");
-      const navLinks = document.getElementById("navLinks");
-      menuToggle.addEventListener("click", () => {
-        menuToggle.classList.toggle("active");
-        navLinks.classList.toggle("active");
-      });
-
-      // Cerrar menú al hacer clic en un enlace (móvil)
-      document.querySelectorAll(".nav-links a").forEach((link) => {
-        link.addEventListener("click", () => {
-          menuToggle.classList.remove("active");
-          navLinks.classList.remove("active");
-        });
-      });
